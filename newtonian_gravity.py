@@ -8,6 +8,7 @@ y_max = 100
 G = 1
 dt = 0.1
 N = 100
+softening = 0.1 #Softening length to prevent divide by 0 errors.
 
 class System:
     """Solar system class to contain planets"""
@@ -43,5 +44,10 @@ class Planet:
         """Function to call calculation between 1 pair"""
         dx = self.position[0] - other.position[0]
         dy = self.position[1] - other.position[1]
+        ds = self.position - other.position
 
         r = np.sqrt(dx**2 + dy**2)
+
+        r_hat = np.divide(ds, r)
+
+        force = np.multiply(-G*self.mass*other.mass/(r**2), r_hat)
